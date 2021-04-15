@@ -1,0 +1,74 @@
+name: Publish Python from Workflow Dispatch
+# Publishes a Python Package with a specified git tag to Azure DevOps, and creates a release
+
+on:
+  workflow_dispatch:
+    inputs:
+      poetry-version:
+        description: 'Version to bump. Can be major, minor, patch, prerelease or a valid semver string.'
+        required: true
+        default: 'prerelease'
+      description-body:
+        description: ''
+        required: false
+        default: ''
+
+jobs:
+  deploy-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Get full Python version
+      id: full-python-version
+      run: |
+        echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
+
+    - name: Install Poetry
+      run: |
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+        echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+
+    - name: Bump version
+      run : |
+        poetry version ${{ github.event.inputs.poetry-version }}
+
+    - name: Create git tag
+      run : |
+        git tag $(poetry version --short)
+        git push origin $(poetry version --short)
+
+    - name: Publish to package repository
+      env:
+        POETRY_PYPI_TOKEN_PYPI: ${{ secrets.GITHUB_TOKEN }}  # will fail
+      run: |
+        poetry build
+        poetry publish
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      continue-on-error: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${GITHUB_REF#refs/tags/}
+        release_name: ${GITHUB_REF#refs/tags/}
+        draft: false
+        prerelease: false
+        body: ${{ github.event.inputs.description-body }}
+
+    # - name: Setup tmate session
+    #   if: ${{ failure() }}
+    #   env:
+    #   uses: mxschmitt/action-tmate@v3
+    #   timeout-minutes: 15
+    #   with:
+    #       limit-access-to-actor: true
+
