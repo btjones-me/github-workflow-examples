@@ -1,7 +1,6 @@
 name: Create PR 
 
 on:
-  push: 
   workflow_dispatch:
 
 jobs:
