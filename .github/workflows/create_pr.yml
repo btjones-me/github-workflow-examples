@@ -11,6 +11,7 @@ jobs:
       run: |
         touch newfile.txt
         git add .
+        git commit -a -m "added file" 
     
     - name: pull-request
       uses: repo-sync/pull-request@v2
