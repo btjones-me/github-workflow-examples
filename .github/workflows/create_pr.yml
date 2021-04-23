@@ -1,3 +1,5 @@
+name: Create PR 
+
 on:
   workflow_dispatch:
 
@@ -9,9 +11,14 @@ jobs:
     
     - name: modify file
       run: |
-        touch newfile.txt
-        git add .
-        git commit -a -m "added file" 
+        echo "version bump" >> pyproject.toml
+        
+    - name: Commit and push pyproject.toml version bump
+      uses: EndBug/add-and-commit@v7
+      with:
+        add: 'newfile.txt'
+        message: 'Committing pyproject.toml version bump'
+        push: true
     
     - name: pull-request
       uses: repo-sync/pull-request@v2
