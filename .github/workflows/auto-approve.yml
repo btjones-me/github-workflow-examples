@@ -2,14 +2,12 @@ name: Auto Approve
 
 on: 
   pull_request:
-  workflow_dispatch:
-
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
     steps:
       - uses: hmarr/auto-approve-action@v2.0.0
 #         if: github.actor == 'github_actions[bot]' && github.event.label.name == 'version-bump'
-        if: github.actor == 'github_actions[bot]'
+        if: github.event.label.name == 'version-bump'
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
