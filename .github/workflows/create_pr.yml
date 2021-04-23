@@ -1,0 +1,23 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: modify file
+    - run: |
+        touch newfile.txt
+    
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      with:
+        destination_branch: "main"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        pr_title: "Bump version ${{ github.ref }}" # Title of pull request
+        pr_label: "version-bump"                           # Comma-separated list (no spaces)
+        pr_allow_empty: false                              # Creates pull request even if there are no changes
+
+
