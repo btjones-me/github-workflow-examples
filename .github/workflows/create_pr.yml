@@ -27,5 +27,6 @@ jobs:
         title: '[Example] Add report file'
         labels: version-bump
         branch: version-bump
+        delete-branch: true
 
 
