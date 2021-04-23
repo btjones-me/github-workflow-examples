@@ -10,6 +10,7 @@ jobs:
     - name: modify file
       run: |
         touch newfile.txt
+        git add .
     
     - name: pull-request
       uses: repo-sync/pull-request@v2
