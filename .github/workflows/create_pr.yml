@@ -17,6 +17,7 @@ jobs:
       uses: EndBug/add-and-commit@v7
       with:
         add: 'pyproject.toml'
+        branch: version-bump
         message: 'Committing pyproject.toml version bump'
         push: true
     
