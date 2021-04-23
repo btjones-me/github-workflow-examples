@@ -1,6 +1,7 @@
 name: Create PR 
 
 on:
+  push: 
   workflow_dispatch:
 
 jobs:
@@ -24,6 +25,7 @@ jobs:
     - name: pull-request
       uses: repo-sync/pull-request@v2
       with:
+        source_branch: version-bump 
         destination_branch: "main"
         github_token: ${{ secrets.GITHUB_TOKEN }}
         pr_title: "Bump version ${{ github.ref }}" # Title of pull request
