@@ -15,7 +15,7 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
-        token: ${{ secrets.REPO_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: Add report file
         body: |
           New report
@@ -28,4 +28,9 @@ jobs:
         branch: version-bump
         delete-branch: true
 
+    - uses: hmarr/auto-approve-action@v2.0.0
+#       if: github.actor == 'github_actions[bot]' && github.event.label.name == 'version-bump'
+      if: github.actor == 'github_actions[bot]'
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
 
