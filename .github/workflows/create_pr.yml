@@ -33,7 +33,7 @@ jobs:
       - name: Enable auto-merge for PRs
         env:
           PR_URL: ${{steps.cpr.outputs.pull-request-url}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.REPO_TOKEN}}
         run: |
           gh pr review "$PR_URL" --approve
           gh pr merge --auto --merge "$PR_URL"
