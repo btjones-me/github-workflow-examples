@@ -35,8 +35,8 @@ jobs:
           PR_URL: ${{steps.cpr.outputs.pull-request-url}}
           GITHUB_TOKEN: ${{secrets.REPO_TOKEN}}
         run: |
-          gh pr review "$PR_URL" --approve
           gh pr merge --auto --merge "$PR_URL"
+          gh pr review "$PR_URL" --approve
 
 
   #     - uses: hmarr/auto-approve-action@v2.0.0
