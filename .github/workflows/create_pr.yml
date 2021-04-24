@@ -33,16 +33,18 @@ jobs:
       - name: Enable auto-merge for PRs
         env:
           PR_URL: ${{steps.cpr.outputs.pull-request-url}}
+          # we'll need to use the service account to create a PAT 
           GITHUB_TOKEN: ${{secrets.REPO_TOKEN}}
         run: |
           gh pr review "$PR_URL" --approve
           gh pr merge --merge "$PR_URL"
 
 
-
+  # this doesn't work because workflows kicked off by github-actions via GITHUB_TOKEN don't trigger other workflows. Using another PAT is possible 
+  # but it doesn't solve the auto merge problem and the label conditional doesn't appear to work 
   #     - uses: hmarr/auto-approve-action@v2.0.0
-  # #       if: github.actor == 'github_actions[bot]' && github.event.label.name == 'version-bump'
-  #       if: github.actor == 'github_actions[bot]'
+  # #       if: github.actor == 'github-actions[bot]' && github.event.label.name == 'version-bump'
+  #       if: github.actor == 'github-actions[bot]'
   #       with:
   #         github-token: "${{ secrets.GITHUB_TOKEN }}"
 
